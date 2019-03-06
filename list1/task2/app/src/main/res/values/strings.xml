@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WsioBus</string>
+    <string name="linia">Linia</string>
+    <string name="godzina">Godzina</string>
+    <string name="przystanek">Przystanek</string>
+    <string name="szukaj">Szukaj</string>
 </resources>
