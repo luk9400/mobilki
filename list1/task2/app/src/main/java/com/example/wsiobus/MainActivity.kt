@@ -14,19 +14,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<TimePicker>(R.id.input).setIs24HourView(true)
     }
 
-    fun search() {
-        var hour = findViewById<TimePicker>(R.id.input).hour
-        var minute = findViewById<TimePicker>(R.id.input).minute
+    private fun search() {
+        val hour = findViewById<TimePicker>(R.id.input).hour
+        val minute = findViewById<TimePicker>(R.id.input).minute
+        val time = hour + minute / 100.0
+        val timetables = Timetables()
 
-        var time = hour + minute / 100.0
-        println(time)
-        var timetables = Timetables()
-
-        for (i in timetables.buses) {
-            print(i.time.toString() + "; ")
-        }
-
-        var bestBus = timetables.buses.get(0)
+        var bestBus = timetables.buses[0]
         for (i in timetables.buses) {
             if (i.time > time) {
                 bestBus = i
