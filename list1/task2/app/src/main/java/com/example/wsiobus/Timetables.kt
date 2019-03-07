@@ -1,6 +1,6 @@
 package com.example.wsiobus
 
-fun busesGenerator(line: String, times: List<Double>, busStop: String, day: String, list: MutableList<Bus>) {
+fun generateBuses(line: String, times: List<Double>, busStop: String, day: String, list: MutableList<Bus>) {
     for (i in times) {
         list.add(Bus(line, i, busStop, day))
     }
@@ -16,11 +16,11 @@ class Timetables {
     var buses: MutableList<Bus> = mutableListOf()
 
     init {
-        busesGenerator("845", c845, "D. cmentarz", "weekday", buses)
-        busesGenerator("845", k845, "D. kosciol", "weekday", buses)
-        busesGenerator("865", c865, "D. cmentarz", "weekday", buses)
-        busesGenerator("865", k865, "D. kosciol", "weekday", buses)
-        busesGenerator("G2", g2, "D. cmentarz", "weekday", buses)
+        generateBuses("845", c845, "D. cmentarz", "weekday", buses)
+        generateBuses("845", k845, "D. kosciol", "weekday", buses)
+        generateBuses("865", c865, "D. cmentarz", "weekday", buses)
+        generateBuses("865", k865, "D. kosciol", "weekday", buses)
+        generateBuses("G2", g2, "D. cmentarz", "weekday", buses)
         buses.sortWith(CompareObjects)
     }
 }

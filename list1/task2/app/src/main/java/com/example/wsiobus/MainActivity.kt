@@ -21,9 +21,15 @@ class MainActivity : AppCompatActivity() {
         val timetables = Timetables()
 
         var bestBus = timetables.buses[0]
-        for (i in timetables.buses) {
-            if (i.time > time) {
-                bestBus = i
+        var bestBus2 = timetables.buses[1]
+        for (i in 0 .. timetables.buses.size - 1) {
+            if (timetables.buses[i].time > time) {
+                bestBus = timetables.buses[i]
+                if (i == timetables.buses.size - 1) {
+                    bestBus2 = timetables.buses[0]
+                } else {
+                    bestBus2 = timetables.buses[i + 1]
+                }
                 break
             }
         }
@@ -31,14 +37,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.busOutput1).text = bestBus.line
         findViewById<TextView>(R.id.timeOutput1).text = bestBus.time.toString()
         findViewById<TextView>(R.id.stopOutput1).text = bestBus.busStop
-
-        var bestBus2 = bestBus
-        for (i in timetables.buses) {
-            if (i.time > bestBus.time) {
-                bestBus2 = i
-                break
-            }
-        }
 
         findViewById<TextView>(R.id.busOutput2).text = bestBus2.line
         findViewById<TextView>(R.id.timeOutput2).text = bestBus2.time.toString()
