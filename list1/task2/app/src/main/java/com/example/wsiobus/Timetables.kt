@@ -17,10 +17,10 @@ class Timetables {
 
     init {
         generateBuses("845", c845, "D. cmentarz", "weekday", buses)
-        generateBuses("845", k845, "D. kosciol", "weekday", buses)
+        generateBuses("845", k845, "D. kościół", "weekday", buses)
         generateBuses("865", c865, "D. cmentarz", "weekday", buses)
-        generateBuses("865", k865, "D. kosciol", "weekday", buses)
+        generateBuses("865", k865, "D. kościół", "weekday", buses)
         generateBuses("G2", g2, "D. cmentarz", "weekday", buses)
-        buses.sortWith(CompareObjects)
+        buses.sortWith(CompareBusObjects)
     }
 }

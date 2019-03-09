@@ -4,4 +4,5 @@
     <string name="godzina">Godzina</string>
     <string name="przystanek">Przystanek</string>
     <string name="szukaj">Szukaj</string>
+    <string name="searchNow">Szukaj teraz</string>
 </resources>
