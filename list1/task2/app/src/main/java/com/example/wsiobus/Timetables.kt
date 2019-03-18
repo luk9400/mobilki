@@ -10,8 +10,8 @@ class Timetables {
     val c845: List<Double> = listOf(4.43, 5.29, 8.15, 12.45, 14.45, 15.45, 19.05)
     val k845: List<Double> = listOf(6.10, 7.15, 10.14, 16.34, 17.54, 18.24, 20.37, 22.32)
     val c865: List<Double> = listOf(5.15, 13.14, 17.17, 21.17)
-    val k865: List<Double> = listOf(7.24, 9.13, 11.13, 15.22, 19.21, 23.14)
-    val g2: List<Double> = listOf(5.15, 6.02, 6.49, 8.11, 16.08, 17.06, 17.40, 18.44)
+    val k865: List<Double> = listOf(7.31, 9.20, 11.20, 15.29, 19.28, 23.14)
+    val g2: List<Double> = listOf(6.05, 7.13, 8.11, 13.30, 14.41, 15.59, 17.10, 18.37)
 
     var buses: MutableList<Bus> = mutableListOf()
 
