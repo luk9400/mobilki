@@ -2,6 +2,7 @@ package com.example.tictac
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -23,8 +24,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun table() {
-        for (i in 0..4) {
-            table.setColumnShrinkable(i, true)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        val width = displayMetrics.widthPixels
+        button1.layoutParams.height = 50
+        button1.layoutParams.width = 50
+
+        for (i in 0 until table.childCount) {
+            val row = table.getChildAt(i) as TableRow
+            for (j in 0 until row.childCount) {
+                row.getChildAt(j).layoutParams.height = width / (table.childCount + 1)
+                row.getChildAt(j).layoutParams.width = width / (table.childCount + 1)
+                //row.getChildAt(j).setBackgroundColor(android.graphics.Color.GRAY)
+            }
         }
     }
 
@@ -61,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     fun checkWin(turn: Turn): Boolean {
         //vertical line
-        for (i in 0 .. table.childCount - 1) {
+        for (i in 0 until table.childCount) {
             val row: TableRow = table.getChildAt(i) as TableRow
             if ((row.getChildAt(0) as Button).text == turn.toString() && (row.getChildAt(1) as Button).text == turn.toString() && (row.getChildAt(2) as Button).text == turn.toString() && (row.getChildAt(3) as Button).text == turn.toString() && (row.getChildAt(4) as Button).text == turn.toString()) {
                 return true
@@ -75,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         val column3: TableRow = table.getChildAt(3) as TableRow
         val column4: TableRow = table.getChildAt(4) as TableRow
 
-        for (i in 0 .. column1.childCount - 1) {
+        for (i in 0 until column1.childCount) {
             if ((column0.getChildAt(i) as Button).text == turn.toString() && (column1.getChildAt(i) as Button).text == turn.toString() && (column2.getChildAt(i) as Button).text == turn.toString() && (column3.getChildAt(i) as Button).text == turn.toString() && (column4.getChildAt(i) as Button).text == turn.toString()) {
                 return true
             }
