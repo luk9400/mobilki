@@ -2,8 +2,17 @@
     <string name="app_name">Hangman</string>
     <string name="word" />
     <string name="picture">picture</string>
+    <string name="input" />
     <string-array name="words">
         <item>komputer</item>
         <item>zgadywanka</item>
+        <item>rzeka</item>
+        <item>diagram</item>
+        <item>graf</item>
+        <item>komutator</item>
+        <item>dzida</item>
+        <item>drezyna</item>
+        <item>sosna</item>
+        <item>problem</item>
     </string-array>
 </resources>
