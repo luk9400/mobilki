@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     turnText.text = hasWon().toString() + " won!!!"
                 }
             }
-            if (hasWon() == null && bot) {
+            if (hasWon() == null && bot && containsEmpty()) {
                 var button: Button
                 while (true) {
                     button = (table.getChildAt(Random.nextInt(5)) as TableRow).getChildAt(Random.nextInt(5)) as Button
@@ -144,6 +144,18 @@ class MainActivity : AppCompatActivity() {
             return true
         }
 
+        return false
+    }
+
+    fun containsEmpty(): Boolean {
+        for (i in 0 until table.childCount) {
+            val row = table.getChildAt(i) as TableRow
+            for (j in 0 until row.childCount) {
+                if ((row.getChildAt(j) as Button).text == "") {
+                    return true
+                }
+            }
+        }
         return false
     }
 }
