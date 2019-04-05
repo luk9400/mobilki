@@ -18,10 +18,10 @@ class addListItem : AppCompatActivity() {
     fun click(view: View) {
         val myIntent = Intent()
         Log.d("test", "Tu powin:     " + text.text)
-        myIntent.putExtra("text", text.text)
-        myIntent.putExtra("info", info.text)
-        myIntent.putExtra("priority", priority.text)
-        myIntent.putExtra("date", date.text)
+        myIntent.putExtra("text", text.text.toString())
+        myIntent.putExtra("info", info.text.toString())
+        myIntent.putExtra("priority", priority.text.toString())
+        myIntent.putExtra("date", date.text.toString())
         setResult(Activity.RESULT_OK, myIntent)
         finish()
     }

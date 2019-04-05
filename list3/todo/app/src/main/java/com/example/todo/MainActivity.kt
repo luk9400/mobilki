@@ -56,10 +56,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 2137) {
-            val text = data!!.getStringExtra("text")
-            val info = data.getStringExtra("info")
-            val priority = data.getStringExtra("priority")
-            val date = data.getStringExtra("date")
+            val text = data?.getStringExtra("text")
+            val info = data?.getStringExtra("info")
+            val priority = data?.getStringExtra("priority")
+            val date = data?.getStringExtra("date")
 
             Log.d("test", "test:          " + text)
 

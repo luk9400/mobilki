@@ -18,6 +18,7 @@ class MyArrayAdapter(context: Context, var data: ArrayList<listItem>) :
             val inflater = LayoutInflater.from(context)
             view = inflater.inflate(R.layout.list_item, parent, false)
         }
+
         Log.d("test", position.toString())
         Log.d("test", data[position].text)
         view!!.findViewById<TextView>(R.id.text).text = data[position].text
