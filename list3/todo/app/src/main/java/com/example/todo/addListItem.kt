@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_add_list_item.*
 
 class addListItem : AppCompatActivity() {
@@ -17,11 +17,14 @@ class addListItem : AppCompatActivity() {
 
     fun click(view: View) {
         val myIntent = Intent()
-        Log.d("test", "Tu powin:     " + text.text)
+
         myIntent.putExtra("text", text.text.toString())
-        myIntent.putExtra("info", info.text.toString())
-        myIntent.putExtra("priority", priority.text.toString())
         myIntent.putExtra("date", date.text.toString())
+        val type = findViewById<RadioButton>(imgView.checkedRadioButtonId).text.toString().toLowerCase()
+        myIntent.putExtra("type", type)
+        val priority = findViewById<RadioButton>(priority.checkedRadioButtonId).text.toString()
+        myIntent.putExtra("priority", priority)
+
         setResult(Activity.RESULT_OK, myIntent)
         finish()
     }

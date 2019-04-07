@@ -47,7 +47,11 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.sort_priority -> {
+                listViewItems.sortWith(priorityComparatorListItem)
+                myAdapter!!.notifyDataSetChanged()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -57,13 +61,11 @@ class MainActivity : AppCompatActivity() {
 
         if(requestCode == 2137) {
             val text = data?.getStringExtra("text")
-            val info = data?.getStringExtra("info")
             val priority = data?.getStringExtra("priority")
             val date = data?.getStringExtra("date")
+            val type = data?.getStringExtra("type")
 
-            Log.d("test", "test:          " + text)
-
-            listViewItems.add(listItem(text, info, priority, date))
+            listViewItems.add(listItem(text, date, type, priority!!.toInt()))
             myAdapter!!.notifyDataSetChanged()
         }
     }

@@ -1,11 +1,13 @@
 package com.example.todo
 
 import android.content.Context
-import android.util.Log
+import android.graphics.Color
+import android.support.constraint.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 
 
@@ -19,9 +21,17 @@ class MyArrayAdapter(context: Context, var data: ArrayList<listItem>) :
             view = inflater.inflate(R.layout.list_item, parent, false)
         }
 
-        Log.d("test", position.toString())
-        Log.d("test", data[position].text)
         view!!.findViewById<TextView>(R.id.text).text = data[position].text
+        view.findViewById<TextView>(R.id.date).text = data[position].date
+        val id = context.resources.getIdentifier("icon_" + data[position].type + "30dp", "drawable", context.applicationContext.packageName)
+        view.findViewById<ImageView>(R.id.imgView).setImageResource(id)
+        var color: Int
+        when (data[position].priority) {
+            1 -> color = Color.parseColor("#d32f2f")
+            2 -> color = Color.parseColor("#ffc107")
+            else -> color = Color.parseColor("#cddc39")
+        }
+        view.findViewById<ConstraintLayout>(R.id.constraint).setBackgroundColor(color)
 
         return view
     }
