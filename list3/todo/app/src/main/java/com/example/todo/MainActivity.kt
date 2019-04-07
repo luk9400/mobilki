@@ -2,17 +2,18 @@ package com.example.todo
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    var listViewItems: ArrayList<listItem> = arrayListOf()
+    val listViewItems = ArrayList<ListItem>()
     var myAdapter: MyArrayAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         myAdapter = MyArrayAdapter(this, listViewItems)
 
         listView.adapter = myAdapter
+
+//        val itemsJson = JSONArray(File(this.filesDir, "items.json").readText())
+//        for (i in 0 until itemsJson.length()) {
+//            listViewItems.add(ListItem(itemsJson[i] as JSONObject))
+//        }
 
         fab.setOnClickListener {
             val myIntent = Intent(this, addListItem::class.java)
@@ -48,8 +54,19 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.sort_priority -> {
-                listViewItems.sortWith(priorityComparatorListItem)
+                listViewItems.sortWith(PriorityComparatorListItem)
                 myAdapter!!.notifyDataSetChanged()
+                true
+            }
+            R.id.sort_type -> {
+                listViewItems.sortBy {e ->
+                    e.type
+                }
+                myAdapter!!.notifyDataSetChanged()
+                true
+            }
+            R.id.sort_date -> {
+                listViewItems.sortBy {it.date}
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -65,8 +82,30 @@ class MainActivity : AppCompatActivity() {
             val date = data?.getStringExtra("date")
             val type = data?.getStringExtra("type")
 
-            listViewItems.add(listItem(text, date, type, priority!!.toInt()))
+            listViewItems.add(ListItem(text, date, type, priority!!.toInt()))
             myAdapter!!.notifyDataSetChanged()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val jsonArray = JSONArray()
+        listViewItems.forEach {e -> jsonArray.put(e.toJson())}
+        File(this.filesDir, "items.json").printWriter().use {out ->
+            out.println(jsonArray.toString())
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        outState?.putSerializable("items", listViewItems)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        listViewItems.addAll(savedInstanceState?.getSerializable("items") as ArrayList<ListItem>)
+        myAdapter!!.notifyDataSetChanged()
     }
 }
