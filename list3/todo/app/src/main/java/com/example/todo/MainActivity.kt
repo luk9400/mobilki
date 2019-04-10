@@ -3,6 +3,7 @@ package com.example.todo
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 
@@ -11,10 +12,12 @@ import kotlinx.android.synthetic.main.content_main.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.IOException
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    val listViewItems = ArrayList<ListItem>()
-    var myAdapter: MyArrayAdapter? = null
+    private val listViewItems = ArrayList<ListItem>()
+    private var myAdapter: MyArrayAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +28,15 @@ class MainActivity : AppCompatActivity() {
 
         listView.adapter = myAdapter
 
-//        val itemsJson = JSONArray(File(this.filesDir, "items.json").readText())
-//        for (i in 0 until itemsJson.length()) {
-//            listViewItems.add(ListItem(itemsJson[i] as JSONObject))
-//        }
+        try {
+            val itemsJson = JSONArray(File(this.filesDir, "items.json").readText())
+            for (i in 0 until itemsJson.length()) {
+                listViewItems.add(ListItem(itemsJson[i] as JSONObject))
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
 
         fab.setOnClickListener {
             val myIntent = Intent(this, addListItem::class.java)
@@ -67,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.sort_date -> {
                 listViewItems.sortBy {it.date}
+                myAdapter!!.notifyDataSetChanged()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -96,16 +105,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-
-        outState?.putSerializable("items", listViewItems)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        listViewItems.addAll(savedInstanceState?.getSerializable("items") as ArrayList<ListItem>)
-        myAdapter!!.notifyDataSetChanged()
-    }
+//    override fun onSaveInstanceState(outState: Bundle?) {
+//        super.onSaveInstanceState(outState)
+//
+//        outState?.putSerializable("items", listViewItems)
+//    }
+//
+//    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+//        super.onRestoreInstanceState(savedInstanceState)
+//
+//        listViewItems.addAll(savedInstanceState?.getSerializable("items") as ArrayList<ListItem>)
+//        myAdapter!!.notifyDataSetChanged()
+//    }
 }
