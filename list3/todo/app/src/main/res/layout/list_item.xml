@@ -23,13 +23,15 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline"/>
     <TextView
             android:text="@string/date"
-            android:textSize="20sp"
-            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/date"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="@+id/guideline"
-            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent" android:textAlignment="textEnd" android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"/>
     <android.support.constraint.Guideline
             android:orientation="vertical"
             android:layout_width="wrap_content"

@@ -11,7 +11,7 @@ import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_add_list_item.*
 import java.util.*
 
-class addListItem : AppCompatActivity(){
+class addListItem : AppCompatActivity() {
     var itemYear: Int? = null
     var itemMonth: Int? = null
     var itemDay: Int? = null
@@ -29,7 +29,7 @@ class addListItem : AppCompatActivity(){
     fun click(view: View) {
         val myIntent = Intent()
 
-        val dateString = itemYear.toString() + "-" + itemMonth + "-" + itemDay
+        val dateString = itemYear.toString() + "-" + (itemMonth!!.plus(1)) + "-" + itemDay
         myIntent.putExtra("text", text.text.toString())
         myIntent.putExtra("date", dateString)
         val type = findViewById<RadioButton>(imgView.checkedRadioButtonId).text.toString().toLowerCase()
