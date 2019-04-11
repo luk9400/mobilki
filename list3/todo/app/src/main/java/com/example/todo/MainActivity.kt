@@ -52,12 +52,15 @@ class MainActivity : AppCompatActivity() {
 
         listView.setOnItemClickListener { _, view, position, _ ->
             val myIntent = Intent(this, addListItem::class.java)
+            val requestCode = 1337
             myIntent.putExtra("text", listViewItems.get(position).text.toString())
             myIntent.putExtra("date", listViewItems.get(position).date.toString())
             myIntent.putExtra("type", listViewItems.get(position).type.toString())
             myIntent.putExtra("priority", listViewItems.get(position).priority.toString())
+            myIntent.putExtra("requestCode", requestCode.toString())
+            myIntent.putExtra("position", position.toString())
 
-            startActivityForResult(myIntent, 1337)
+            startActivityForResult(myIntent, requestCode)
         }
     }
 
@@ -104,6 +107,17 @@ class MainActivity : AppCompatActivity() {
 
             listViewItems.add(ListItem(text, date, type, priority!!.toInt()))
             myAdapter!!.notifyDataSetChanged()
+        }
+
+        if (requestCode == 1337) {
+            val position = data?.getStringExtra("position")?.toInt()
+            if (position != null) {
+                listViewItems[position].text = data.getStringExtra("text")
+                listViewItems[position].date = data.getStringExtra("date")
+                listViewItems[position].type = data.getStringExtra("type")
+                listViewItems[position].priority = data.getStringExtra("priority").toInt()
+                myAdapter!!.notifyDataSetChanged()
+            }
         }
     }
 

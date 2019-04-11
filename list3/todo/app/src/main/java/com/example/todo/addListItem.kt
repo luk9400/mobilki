@@ -20,22 +20,54 @@ class addListItem : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_list_item)
 
-        val c = Calendar.getInstance()
-        itemYear = c.get(Calendar.YEAR)
-        itemMonth = c.get(Calendar.MONTH)
-        itemDay = c.get(Calendar.DAY_OF_MONTH)
+        val requestCode = intent.getStringExtra("requestCode")
+
+        if (requestCode != null && requestCode.toInt() == 1337) {
+            text.setText(intent.getStringExtra("text"))
+            when (intent.getStringExtra("priority").toInt()) {
+                1 -> prior1.isChecked = true
+                2 -> prior2.isChecked = true
+                else -> prior3.isChecked = true
+            }
+            when (intent.getStringExtra("type")) {
+                "work" -> work.isChecked = true
+                "home" -> home.isChecked = true
+                else -> school.isChecked = true
+            }
+            val dateString = intent.getStringExtra("date")
+            itemYear = dateString.substring(0, 4).toInt()
+            itemMonth = dateString.substring(5, 7).toInt()
+            itemDay = dateString.substring(8, 10).toInt()
+        } else {
+            val c = Calendar.getInstance()
+            itemYear = c.get(Calendar.YEAR)
+            itemMonth = c.get(Calendar.MONTH) + 1
+            itemDay = c.get(Calendar.DAY_OF_MONTH)
+        }
     }
 
     fun click(view: View) {
         val myIntent = Intent()
 
-        val dateString = itemYear.toString() + "-" + (itemMonth!!.plus(1)) + "-" + itemDay
+        var dateString = itemYear.toString() + "-"
+        if ((itemMonth!!.plus(1)) > 9) {
+            dateString += itemMonth.toString() + "-"
+        } else {
+            dateString += "0" + itemMonth + "-"
+        }
+        if (itemDay!! > 9) {
+            dateString += itemDay
+        } else {
+            dateString += "0" + itemDay
+        }
+
         myIntent.putExtra("text", text.text.toString())
         myIntent.putExtra("date", dateString)
         val type = findViewById<RadioButton>(imgView.checkedRadioButtonId).text.toString().toLowerCase()
         myIntent.putExtra("type", type)
         val priority = findViewById<RadioButton>(priority.checkedRadioButtonId).text.toString()
         myIntent.putExtra("priority", priority)
+        myIntent.putExtra("position", intent.getStringExtra("position")?.toString())
 
         setResult(Activity.RESULT_OK, myIntent)
         finish()
