@@ -10,17 +10,6 @@
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:id="@+id/date"
-            android:maxLength="10"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:hint="@string/date"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/text" android:autofillHints=""/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/text" android:layout_marginTop="8dp"
@@ -81,20 +70,20 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@+id/textView4" app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/date"/>
+            app:layout_constraintTop_toBottomOf="@+id/date_button"/>
     <TextView
             android:text="@string/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/textView4"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/date" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/textView" android:layout_marginTop="8dp"/>
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/textView" app:layout_constraintTop_toBottomOf="@+id/date_button"/>
     <Button
             android:text="Set date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/date_button" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/button" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/date_button"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:onClick="dateClick"/>
+            android:onClick="dateClick" android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/text"/>
 </android.support.constraint.ConstraintLayout>

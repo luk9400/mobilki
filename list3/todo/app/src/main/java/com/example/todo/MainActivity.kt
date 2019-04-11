@@ -9,6 +9,7 @@ import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.list_item.view.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -47,6 +48,16 @@ class MainActivity : AppCompatActivity() {
             listViewItems.removeAt(position)
             myAdapter!!.notifyDataSetChanged()
             false
+        }
+
+        listView.setOnItemClickListener { _, view, position, _ ->
+            val myIntent = Intent(this, addListItem::class.java)
+            myIntent.putExtra("text", listViewItems.get(position).text.toString())
+            myIntent.putExtra("date", listViewItems.get(position).date.toString())
+            myIntent.putExtra("type", listViewItems.get(position).type.toString())
+            myIntent.putExtra("priority", listViewItems.get(position).priority.toString())
+
+            startActivityForResult(myIntent, 1337)
         }
     }
 

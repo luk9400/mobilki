@@ -12,17 +12,26 @@ import kotlinx.android.synthetic.main.activity_add_list_item.*
 import java.util.*
 
 class addListItem : AppCompatActivity(){
+    var itemYear: Int? = null
+    var itemMonth: Int? = null
+    var itemDay: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_list_item)
+
+        val c = Calendar.getInstance()
+        itemYear = c.get(Calendar.YEAR)
+        itemMonth = c.get(Calendar.MONTH)
+        itemDay = c.get(Calendar.DAY_OF_MONTH)
     }
 
     fun click(view: View) {
         val myIntent = Intent()
 
+        val dateString = itemYear.toString() + "-" + itemMonth + "-" + itemDay
         myIntent.putExtra("text", text.text.toString())
-        myIntent.putExtra("date", date.text.toString())
+        myIntent.putExtra("date", dateString)
         val type = findViewById<RadioButton>(imgView.checkedRadioButtonId).text.toString().toLowerCase()
         myIntent.putExtra("type", type)
         val priority = findViewById<RadioButton>(priority.checkedRadioButtonId).text.toString()
@@ -39,6 +48,9 @@ class addListItem : AppCompatActivity(){
         val day = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, month, day ->
             Log.d("test", day.toString() + " " + month + " " + year)
+            itemDay = day
+            itemMonth = month
+            itemYear = year
         }, year, month, day)
         datePickerDialog.show()
     }
