@@ -50,13 +50,13 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-        listView.setOnItemClickListener { _, view, position, _ ->
+        listView.setOnItemClickListener { _, _, position, _ ->
             val myIntent = Intent(this, addListItem::class.java)
             val requestCode = 1337
-            myIntent.putExtra("text", listViewItems.get(position).text.toString())
-            myIntent.putExtra("date", listViewItems.get(position).date.toString())
-            myIntent.putExtra("type", listViewItems.get(position).type.toString())
-            myIntent.putExtra("priority", listViewItems.get(position).priority.toString())
+            myIntent.putExtra("text", listViewItems[position].text.toString())
+            myIntent.putExtra("date", listViewItems[position].date.toString())
+            myIntent.putExtra("type", listViewItems[position].type.toString())
+            myIntent.putExtra("priority", listViewItems[position].priority.toString())
             myIntent.putExtra("requestCode", requestCode.toString())
             myIntent.putExtra("position", position.toString())
 
@@ -100,13 +100,17 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 2137) {
-            val text = data?.getStringExtra("text")
-            val priority = data?.getStringExtra("priority")
-            val date = data?.getStringExtra("date")
-            val type = data?.getStringExtra("type")
+            try {
+                val text = data?.getStringExtra("text")
+                val priority = data?.getStringExtra("priority")
+                val date = data?.getStringExtra("date")
+                val type = data?.getStringExtra("type")
 
-            listViewItems.add(ListItem(text, date, type, priority!!.toInt()))
-            myAdapter!!.notifyDataSetChanged()
+                listViewItems.add(ListItem(text, date, type, priority!!.toInt()))
+                myAdapter!!.notifyDataSetChanged()
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+            }
         }
 
         if (requestCode == 1337) {
