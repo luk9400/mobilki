@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_gallery_image.view.*
 
 class GalleryImageAdapter(private val itemList: List<Image>) : RecyclerView.Adapter<GalleryImageAdapter.ViewHolder>() {
@@ -29,13 +29,9 @@ class GalleryImageAdapter(private val itemList: List<Image>) : RecyclerView.Adap
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind() {
-            val image = itemList.get(adapterPosition)
+            val image = itemList[adapterPosition]
             // load image
-            GlideApp.with(context!!)
-                .load(image.imageUrl)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(itemView.ivGalleryImage)
+            Picasso.get().load(image.imageUrl).into(itemView.ivGalleryImage)
 
             // adding click or tap handler for our image layout
             itemView.container.setOnClickListener {

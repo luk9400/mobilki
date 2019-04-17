@@ -1,29 +1,26 @@
 package com.example.gallery
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), GalleryImageClickListener {
-    // gallery column count
-    private val SPAN_COUNT = 3
+
     private val imageList = ArrayList<Image>()
-    lateinit var galleryAdapter: GalleryImageAdapter
+    lateinit var galleryAdapter: GalleryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // init adapter
-        galleryAdapter = GalleryImageAdapter(imageList)
+        galleryAdapter = GalleryAdapter(imageList)
         galleryAdapter.listener = this
 
-        // init recyclerview
-        recyclerView.layoutManager = GridLayoutManager(this, SPAN_COUNT)
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = galleryAdapter
 
-        // load images
         loadImages()
     }
 
@@ -46,13 +43,8 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
         galleryAdapter.notifyDataSetChanged()
     }
 
-    override fun onClick(position: Int) {
-        val bundle = Bundle()
-        bundle.putSerializable("images", imageList)
-        bundle.putInt("position", position)
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val galleryFragment = GalleryFullscreenFragment()
-        galleryFragment.arguments = bundle
-        galleryFragment.show(fragmentTransaction, "gallery")
+    override fun click(position: Int) {
+        val myIntent = Intent(this, SecondActivity::class.java)
+        startActivity(myIntent)
     }
 }

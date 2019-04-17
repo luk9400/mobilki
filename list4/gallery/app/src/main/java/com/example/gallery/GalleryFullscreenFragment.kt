@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_gallery_fullscreen.*
 import kotlinx.android.synthetic.main.image_fullscreen.view.*
 
 class GalleryFullscreenFragment : DialogFragment() {
@@ -18,11 +21,13 @@ class GalleryFullscreenFragment : DialogFragment() {
     lateinit var tvGalleryTitle: TextView
     lateinit var viewPager: ViewPager
     lateinit var galleryPagerAdapter: GalleryPagerAdapter
+    lateinit var ratingBar: RatingBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_gallery_fullscreen, container, false)
         viewPager = view.findViewById(R.id.viewPager)
         tvGalleryTitle = view.findViewById(R.id.tvGalleryTitle)
+        ratingBar = view.findViewById(R.id.ratingBar)
         galleryPagerAdapter = GalleryPagerAdapter()
         imageList = arguments?.getSerializable("images") as ArrayList<Image>
         selectedPosition = arguments!!.getInt("position")
@@ -30,6 +35,11 @@ class GalleryFullscreenFragment : DialogFragment() {
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener)
         viewPager.setPageTransformer(true, ZoomOutPageTransformer())
         setCurrentItem(selectedPosition)
+
+        ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
+            imageList[selectedPosition].rating = rating
+        }
+
         return view
     }
 
@@ -47,7 +57,8 @@ class GalleryFullscreenFragment : DialogFragment() {
         object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
                 // set gallery title
-                tvGalleryTitle.text = imageList.get(position).title
+                tvGalleryTitle.text = imageList[position].title
+                ratingBar.rating = imageList[position].rating
             }
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
             }
@@ -60,13 +71,11 @@ class GalleryFullscreenFragment : DialogFragment() {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val layoutInflater = activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = layoutInflater.inflate(R.layout.image_fullscreen, container, false)
-            val image = imageList.get(position)
+            val image = imageList[position]
+
             // load image
-            GlideApp.with(context!!)
-                .load(image.imageUrl)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view.ivFullscreenImage)
+            Picasso.get().load(image.imageUrl).into(view.ivFullscreenImage)
+
             container.addView(view)
             return view
         }
