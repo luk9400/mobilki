@@ -1,19 +1,23 @@
 package com.example.gallery
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
 import java.io.Serializable
+import java.util.prefs.NodeChangeListener
 
 class ImageInfoFragment : Fragment() {
     lateinit var titleView: TextView
     lateinit var ratingBar: RatingBar
+    lateinit var callback: OnRatingBarClickListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_image_info, container, false)
@@ -24,14 +28,9 @@ class ImageInfoFragment : Fragment() {
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
                 if (fromUser) {
-                    val myIntent = Intent(activity, MainActivity::class.java)
-                    myIntent.putExtra("rating", rating)
-                    myIntent.putExtra("position", position)
-                    startActivity(myIntent)
+                    callback.onRatingBarClick(rating, position)
                 }
             }
-        } else {
-
         }
         return view
 
@@ -65,6 +64,10 @@ class ImageInfoFragment : Fragment() {
         }
     }
 
+    fun setListener(listener: OnRatingBarClickListener) {
+        callback = listener
+    }
+
     companion object {
         fun newInstance(position: Int, image: Serializable): ImageInfoFragment {
             val frag = ImageInfoFragment()
@@ -75,5 +78,9 @@ class ImageInfoFragment : Fragment() {
 
             return frag
         }
+    }
+
+    interface OnRatingBarClickListener {
+        fun onRatingBarClick(rating: Float, position: Int)
     }
 }

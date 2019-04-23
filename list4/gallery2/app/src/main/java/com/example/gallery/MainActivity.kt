@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_image_fullscreen.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity(), GalleryImageClickListener {
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
     lateinit var galleryAdapter: GalleryAdapter
     private var imageFullscreenFragment = ImageFullscreenFragment()
     private var imageInfoFragment = ImageInfoFragment()
+    private var currentPhoto = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,15 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = galleryAdapter
 
+        loadImages()
+
+        if (intent != null && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            currentPhoto = intent.getIntExtra("position", 0)
+            pickImage(currentPhoto)
+        }
+    }
+
+    fun loadImages() {
         val file = File(this.filesDir, "items.json")
         if (file.exists()) {
             val itemsJson = JSONArray(file.readText())
@@ -45,7 +56,7 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
                 imageList.add(Image(itemsJson[i] as JSONObject))
             }
         } else {
-            val string = application.assets.open("items.json").bufferedReader().use{
+            val string = application.assets.open("items.json").bufferedReader().use {
                 it.readText()
             }
             val itemsJson = JSONArray(string)
@@ -53,21 +64,10 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
                 imageList.add(Image(itemsJson[i] as JSONObject))
             }
         }
-
-        if (intent != null && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            pickImage(intent.getIntExtra("position", 0))
-        } else if (intent != null) {
-            val position = intent.getIntExtra("position", 0)
-            val rating = intent.getFloatExtra("rating", 0f)
-            imageList[position].rating = rating
-            imageList.sortBy {
-                it.rating
-            }
-            galleryAdapter.notifyDataSetChanged()
-        }
     }
 
     override fun click(position: Int) {
+        currentPhoto = position
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             val myIntent = Intent(this, SecondActivity::class.java)
             myIntent.putExtra("url", imageList[position].imageUrl)
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
             myIntent.putExtra("rating", imageList[position].rating)
             myIntent.putExtra("position", position)
 
-            startActivity(myIntent)
+            startActivityForResult(myIntent, 2137)
         } else {
             pickImage(position)
         }
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
         galleryAdapter.notifyDataSetChanged()
     }
 
-    private fun pickImage(position: Int){
+    private fun pickImage(position: Int) {
         supportFragmentManager.beginTransaction().remove(imageFullscreenFragment).commit()
         imageFullscreenFragment = ImageFullscreenFragment.newInstance(imageList[position])
         supportFragmentManager.beginTransaction().add(R.id.imageFrame, imageFullscreenFragment).commit()
@@ -109,5 +109,22 @@ class MainActivity : AppCompatActivity(), GalleryImageClickListener {
         supportFragmentManager.beginTransaction().remove(imageInfoFragment).commit()
         imageInfoFragment = ImageInfoFragment.newInstance(position, imageList[position])
         supportFragmentManager.beginTransaction().add(R.id.infoFrame, imageInfoFragment).commit()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2137) {
+            try {
+                val position = data?.getIntExtra("position", 0)
+                val rating = data?.getFloatExtra("rating", 0f)
+                imageList[position!!].rating = rating!!
+                imageList.sortBy {
+                    it.rating
+                }
+                galleryAdapter.notifyDataSetChanged()
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+            }
+        }
     }
 }
