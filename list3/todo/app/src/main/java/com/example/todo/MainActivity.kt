@@ -112,13 +112,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (requestCode == 1337) {
-            val position = data?.getStringExtra("position")?.toInt()
-            if (position != null) {
-                listViewItems[position].text = data.getStringExtra("text")
-                listViewItems[position].date = data.getStringExtra("date")
-                listViewItems[position].type = data.getStringExtra("type")
-                listViewItems[position].priority = data.getStringExtra("priority").toInt()
-                myAdapter!!.notifyDataSetChanged()
+            try {
+                val position = data?.getStringExtra("position")?.toInt()
+                if (position != null) {
+                    listViewItems[position].text = data.getStringExtra("text")
+                    listViewItems[position].date = data.getStringExtra("date")
+                    listViewItems[position].type = data.getStringExtra("type")
+                    listViewItems[position].priority = data.getStringExtra("priority").toInt()
+                    myAdapter!!.notifyDataSetChanged()
+                }
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
             }
         }
     }
