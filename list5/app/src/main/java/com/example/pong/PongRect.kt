@@ -5,8 +5,8 @@ import android.graphics.Paint
 import android.graphics.RectF
 
 class PongRect(private val left: Boolean, var x: Float, var y: Float) {
-    private val rectWidth = 50f
-    private val rectHeight = 500f
+    val rectHeight = 500f
+    val rectWidth = 50f
 
     fun draw(canvas: Canvas) {
         val rect = if (left) {

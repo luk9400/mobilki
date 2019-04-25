@@ -4,8 +4,10 @@ package com.example.pong
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -17,22 +19,15 @@ class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(conte
     SurfaceHolder.Callback {
 
     private val thread: GameThread
-
-    private var ballX = 0f
-    private var ballY = 0f
-    private var dx = 5f
-    private var dy = 5f
-    private val SIZE = 300f
-
     lateinit var leftRect: PongRect
     lateinit var rightRect: PongRect
     lateinit var ball: Ball
+    lateinit var game: Game
 
     init {
         holder.addCallback(this)
         thread = GameThread(holder, this)
     }
-
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
     }
@@ -49,11 +44,15 @@ class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(conte
         ball = Ball(width / 2f, height / 2f)
         ball.setGameView(this)
 
+        game = Game(leftRect, rightRect, ball)
+
         thread.setRunning(true)
         thread.start()
     }
 
     fun update() {
+        game.lookForPoints()
+        if (game.score()) ball.reset()
         ball.move()
     }
 
@@ -65,8 +64,22 @@ class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(conte
         leftRect.draw(canvas)
         rightRect.draw(canvas)
         ball.draw(canvas)
+        printScore(canvas)
     }
 
+    private fun printScore(canvas: Canvas?) {
+        if (canvas == null) return
+
+        val textPaint = TextPaint()
+        textPaint.color = Color.WHITE
+        textPaint.textSize = 300f
+        textPaint.alpha = 100
+        textPaint.textAlign = Paint.Align.CENTER
+
+        val x = canvas.width / 2f
+        val y = canvas.height / 2f
+        canvas.drawText("${game.leftPoints} : ${game.rightPoints}", x, y, textPaint)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
