@@ -1,6 +1,6 @@
 package com.example.pong
 
-class Game(private val leftRect: PongRect, private val rightRect: PongRect, private val ball: Ball) {
+class Game(private val leftRect: PongRect, private val rightRect: PongRect, private val ball: Ball, var highScore: Int) {
     var leftPoints = 0
     var rightPoints = 0
 
@@ -19,10 +19,16 @@ class Game(private val leftRect: PongRect, private val rightRect: PongRect, priv
         return when {
             ball.x < leftRect.x + leftRect.rectWidth -> {
                 rightPoints++
+                if (rightPoints > highScore) {
+                    highScore = rightPoints
+                }
                 true
             }
             ball.x + ball.size > rightRect.x - rightRect.rectWidth -> {
                 leftPoints++
+                if (leftPoints > highScore) {
+                    highScore = leftPoints
+                }
                 true
             }
             else -> false

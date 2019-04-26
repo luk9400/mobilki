@@ -1,6 +1,5 @@
 package com.example.pong
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -18,6 +17,7 @@ import java.lang.Math.abs
 class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(context, attributeSet),
     SurfaceHolder.Callback {
 
+    private val sharedPref = context.getSharedPreferences("highScore", Context.MODE_PRIVATE)
     private val thread: GameThread
     lateinit var leftRect: PongRect
     lateinit var rightRect: PongRect
@@ -44,7 +44,7 @@ class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(conte
         ball = Ball(width / 2f, height / 2f)
         ball.setGameView(this)
 
-        game = Game(leftRect, rightRect, ball)
+        game = Game(leftRect, rightRect, ball, sharedPref.getInt("highScore", 0))
 
         thread.setRunning(true)
         thread.start()
@@ -52,7 +52,10 @@ class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(conte
 
     fun update() {
         game.lookForPoints()
-        if (game.score()) ball.reset()
+        if (game.score()) {
+            sharedPref.edit().putInt("highScore", game.highScore).apply()
+            ball.reset()
+        }
         ball.move()
     }
 
@@ -79,6 +82,8 @@ class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(conte
         val x = canvas.width / 2f
         val y = canvas.height / 2f
         canvas.drawText("${game.leftPoints} : ${game.rightPoints}", x, y, textPaint)
+        textPaint.textSize = 100f
+        canvas.drawText("${game.highScore}", x, y - 200f, textPaint)
     }
 
     @SuppressLint("ClickableViewAccessibility")

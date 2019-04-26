@@ -26,6 +26,8 @@ class Ball(private val initX:Float, private val initY: Float) {
     }
 
     fun move() {
+        dx *= 1.001f
+        dy *= 1.001f
         x += dx
         y += dy
         changeDirection(0f, gameView.width.toFloat())
