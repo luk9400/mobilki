@@ -5,14 +5,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.RectF
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import java.lang.Math.abs
 
 class GameView(context: Context, attributeSet: AttributeSet) : SurfaceView(context, attributeSet),
     SurfaceHolder.Callback {
