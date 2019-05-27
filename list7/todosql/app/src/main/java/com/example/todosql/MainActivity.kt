@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         listView.setOnItemLongClickListener { _, _, position, _ ->
+            val task = listViewItems[position]
+            AsyncTask.execute {
+                db.taskDao().deleteTask(task)
+            }
             listViewItems.removeAt(position)
             myAdapter!!.notifyDataSetChanged()
             false

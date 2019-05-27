@@ -1,6 +1,7 @@
 package com.example.todosql
 
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 
@@ -11,6 +12,9 @@ interface TaskDAO {
 
     @Query("update tasks set text = :text, date = :date, type = :type, priority = :priority where id = :id")
     fun update(id: Long, text: String?, date: String?, type: String?, priority: Int)
+
+    @Delete
+    fun deleteTask(task: Task)
 
     @Insert
     fun insertAll(vararg task: Task)
