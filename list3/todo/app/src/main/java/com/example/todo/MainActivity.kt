@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
 
         fab.setOnClickListener {
-            val myIntent = Intent(this, addListItem::class.java)
+            val myIntent = Intent(this, AddListItemActivity::class.java)
             startActivityForResult(myIntent, 2137)
         }
 
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->
-            val myIntent = Intent(this, addListItem::class.java)
+            val myIntent = Intent(this, AddListItemActivity::class.java)
             val requestCode = 1337
             myIntent.putExtra("text", listViewItems[position].text.toString())
             myIntent.putExtra("date", listViewItems[position].date.toString())

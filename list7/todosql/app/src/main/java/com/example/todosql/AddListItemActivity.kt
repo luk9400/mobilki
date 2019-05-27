@@ -11,7 +11,7 @@ import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_add_list_item.*
 import java.util.*
 
-class addListItem : AppCompatActivity() {
+class AddListItemActivity : AppCompatActivity() {
     var itemYear: Int? = null
     var itemMonth: Int? = null
     var itemDay: Int? = null
@@ -68,6 +68,7 @@ class addListItem : AppCompatActivity() {
         val priority = findViewById<RadioButton>(priority.checkedRadioButtonId).text.toString()
         myIntent.putExtra("priority", priority)
         myIntent.putExtra("position", intent.getStringExtra("position")?.toString())
+        myIntent.putExtra("id", intent.getStringExtra("id")?.toString())
 
         setResult(Activity.RESULT_OK, myIntent)
         finish()
@@ -81,7 +82,7 @@ class addListItem : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, month, day ->
             Log.d("test", day.toString() + " " + month + " " + year)
             itemDay = day
-            itemMonth = month
+            itemMonth = month + 1
             itemYear = year
         }, year, month, day)
         datePickerDialog.show()

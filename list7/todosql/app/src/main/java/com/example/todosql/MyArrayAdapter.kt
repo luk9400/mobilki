@@ -11,8 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 
 
-class MyArrayAdapter(context: Context, var data: ArrayList<ListItem>) :
-    ArrayAdapter<ListItem>(context, R.layout.list_item, data) {
+class MyArrayAdapter(context: Context, var data: ArrayList<Task>) :
+    ArrayAdapter<Task>(context, R.layout.list_item, data) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
