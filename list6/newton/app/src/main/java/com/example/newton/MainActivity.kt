@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun createAPI() {
         retrofit = Retrofit.Builder()
-            .baseUrl("https://newton.now.sh")
+            //.baseUrl("https://newton.now.sh")
+            .baseUrl("http://156.17.7.48:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
