@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.example.todonotification.MainActivity">
+    <item android:id="@+id/sort_priority"
+          android:title="@string/sort_by_priority"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+    <item android:id="@+id/sort_date"
+          android:title="@string/sort_by_date"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+    <item android:id="@+id/sort_type"
+          android:title="@string/sort_by_type"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+</menu>
