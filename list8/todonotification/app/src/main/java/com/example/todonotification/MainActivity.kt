@@ -1,12 +1,18 @@
 package com.example.todonotification
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.arch.persistence.room.Room
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
@@ -29,10 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         listView.adapter = myAdapter
 
-        val filter = IntentFilter()
-        filter.addAction("done")
-        registerReceiver(MyReceiver(), filter)
-
         AsyncTask.execute {
             try {
                 db = Room.databaseBuilder(this, Database::class.java, "todo.db").build()
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             listViewItems.addAll(db.taskDao().getAll())
-            Log.d("dupa", listViewItems.toString())
+            //Log.d("dupa", listViewItems.toString())
         }
 
         fab.setOnClickListener {
@@ -86,19 +88,19 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.sort_priority -> {
-                listViewItems.sortBy {it.priority}
+                listViewItems.sortBy { it.priority }
                 myAdapter!!.notifyDataSetChanged()
                 true
             }
             R.id.sort_type -> {
-                listViewItems.sortBy {e ->
+                listViewItems.sortBy { e ->
                     e.type
                 }
                 myAdapter!!.notifyDataSetChanged()
                 true
             }
             R.id.sort_date -> {
-                listViewItems.sortBy {it.date}
+                listViewItems.sortBy { it.date }
                 myAdapter!!.notifyDataSetChanged()
                 true
             }
@@ -109,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == 2137) {
+        if (requestCode == 2137) {
             try {
                 val text = data?.getStringExtra("text")
                 val priority = data?.getStringExtra("priority")
@@ -123,10 +125,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 myAdapter!!.notifyDataSetChanged()
 
-                val myIntent = Intent(this, MyService::class.java)
-                myIntent.putExtra("text", text)
-                myIntent.putExtra("date", date)
-                startService(myIntent)
+                setNotification(text, date)
             } catch (e: NullPointerException) {
                 e.printStackTrace()
             }
@@ -156,9 +155,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private inner class MyReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d("dupa", "hehe")
+    private fun setNotification(text: String?, date: String?) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                makeNotification(text, date)
+                Log.d("dupa", "powiadomionko")
+            }
+        }
+        registerReceiver(receiver, IntentFilter("notification"))
+
+        val intent = Intent()
+        intent.action = "notification"
+
+        val alarmManager = getSystemService(ALARM_SERVICE) as? AlarmManager
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(
+                date!!.substring(0, 4).toInt(),
+                date!!.substring(5, 7).toInt() - 1,
+                date!!.substring(8, 10).toInt(),
+                15,
+                0
+            )
+        }
+
+        alarmManager?.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
+    private fun makeNotification(text: String?, date: String?) {
+        val CHANNEL_ID = "channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_ID, NotificationManager.IMPORTANCE_DEFAULT)
+            val manager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(text)
+                .setContentText(date)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.notification_icon_background)
+
+            val myIntent = Intent(this, MainActivity::class.java)
+            val pending = PendingIntent.getActivity(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            builder.setContentIntent(pending)
+
+            val notification = builder.build()
+            manager.notify(1234, notification)
         }
     }
 }
