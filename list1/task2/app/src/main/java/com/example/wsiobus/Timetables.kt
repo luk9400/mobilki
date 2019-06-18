@@ -7,11 +7,12 @@ fun generateBuses(line: String, times: List<Double>, busStop: String, day: Strin
 }
 
 class Timetables {
+    //last update 18.06.2019
     val c845: List<Double> = listOf(4.43, 5.29, 8.15, 12.45, 14.45, 15.45, 19.05)
-    val k845: List<Double> = listOf(6.10, 7.15, 10.14, 16.34, 17.54, 18.24, 20.37, 22.32)
-    val c865: List<Double> = listOf(5.15, 13.14, 17.17, 21.17)
-    val k865: List<Double> = listOf(7.31, 9.20, 11.20, 15.29, 19.28, 23.14)
-    val g2: List<Double> = listOf(6.05, 7.13, 8.11, 13.30, 14.41, 15.59, 17.10, 18.37)
+    val k845: List<Double> = listOf(6.10, 7.15, 10.34, 16.34, 17.54, 18.24, 20.37, 22.42)
+    val c865: List<Double> = listOf(5.13, 13.15, 17.15, 21.18)
+    val k865: List<Double> = listOf(7.07, 9.21, 11.31, 15.21, 19.26, 23.17)
+    val g2: List<Double> = listOf(5.56, 7.16, 8.27, 13.30, 14.45, 15.39, 16.41, 17.43, 18.34)
 
     var buses: MutableList<Bus> = mutableListOf()
 
