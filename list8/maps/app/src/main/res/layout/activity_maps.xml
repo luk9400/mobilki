@@ -22,4 +22,14 @@
             map:layout_constraintBottom_toBottomOf="parent" map:layout_constraintEnd_toEndOf="parent"
             map:layout_constraintStart_toStartOf="parent" map:layout_constraintHorizontal_bias="0.5"
             map:layout_constraintTop_toBottomOf="@+id/spinner" android:layout_marginTop="32dp"/>
+    <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true" app:srcCompat="@android:drawable/ic_input_add"
+            android:id="@+id/fab"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.9" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.95"/>
 </android.support.constraint.ConstraintLayout>

@@ -2,12 +2,10 @@ package com.example.maps
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,6 +33,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
         FirebaseApp.initializeApp(this)
         db = FirebaseFirestore.getInstance()
         populateSpinner()
+
+        fab.setOnClickListener { view ->
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Add location")
+
+            val linear = LinearLayout(this)
+            linear.orientation = LinearLayout.VERTICAL
+            val nameInput = EditText(this)
+            nameInput.hint = "Name"
+            val longitudeInput = EditText(this)
+            longitudeInput.hint = "Longitude"
+            val latitudeInput = EditText(this)
+            latitudeInput.hint = "Latitude"
+            linear.addView(nameInput)
+            linear.addView(longitudeInput)
+            linear.addView(latitudeInput)
+
+            builder.setView(linear)
+
+            builder.setPositiveButton("OK") { _, _ ->
+                val name = nameInput.text.toString()
+                val latitude = latitudeInput.text.toString().toDouble()
+                val longitude = longitudeInput.text.toString().toDouble()
+                val docRef = db.collection("locations").document()
+                val docId = docRef.id
+                val location = Location(docId, name, longitude, latitude)
+
+                Locations.addLocation(location, docRef, view)
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+            builder.show()
+        }
     }
 
     /**
@@ -50,17 +83,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val wro = LatLng(51.0, 17.0)
+        mMap.addMarker(MarkerOptions().position(wro).title("Marker in Wro"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(wro, 10f))
+
     }
 
     private fun populateSpinner() {
         db.collection("locations")
             .get()
-            .addOnSuccessListener { documments ->
+            .addOnSuccessListener { documents ->
                 Locations.clear()
-                for (document in documments) {
+                for (document in documents) {
                     val n = document.toObject(Location::class.java)
                     Locations.addLocation(n)
                 }
